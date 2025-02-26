@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a.active div{
+  /* bg-green-300 p-3 rounded-full */
+  background-color: #438050;
+  border-radius: 50%;
+  > img {
+    filter: invert(100%);
+  }
+}
+
+*{
+  font-family: "Tajawal" , serif;
+}
+
+.title-shadow{
+  text-shadow: 0px 4px 4px rgb(0, 0, 0 , 0.3);
+}
+
+.tajawal-extralight {
+  font-family: "Tajawal", serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.tajawal-light {
+  font-family: "Tajawal", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.tajawal-regular {
+  font-family: "Tajawal", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.tajawal-medium {
+  font-family: "Tajawal", serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.tajawal-bold {
+  font-family: "Tajawal", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.tajawal-extrabold {
+  font-family: "Tajawal", serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.tajawal-black {
+  font-family: "Tajawal", serif;
+  font-weight: 900;
+  font-style: normal;
+}
