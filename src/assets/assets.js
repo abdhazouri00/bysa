@@ -17,6 +17,10 @@ import profileImgNavbar from "./profileimgNavbar.png";
 import search from "./search.png";
 import zaid from "./zaid,png.png";
 import add from "./add.png"
+import left from "./left.png"
+import right from "./right.png"
+import down from "./down.png"
+import profilepicbg from "./profilepicbg.png"
 
 export const assets = {
   ali,
@@ -37,5 +41,9 @@ export const assets = {
   profileImgNavbar,
   search,
   zaid,
-  add
+  add,
+  left,
+  right,
+  down,
+  profilepicbg,
 };

@@ -1,17 +1,56 @@
 import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import Input from "../components/Input";
+import axios from "axios";
 
 const NewProj = () => {
-  const [category, setCategory] = useState(null);
+  const [category, setCategory] = useState("handicrafts");
+  const [formData, setFormData] = useState({
+    user_id: "67bf2e0fb1b374150b17d399",
+    title: "",
+    location: "",
+    description: "",
+    categoryText: "",
+    mainImage: "",
+    images: [],
+    extraPhoto: "",
+    type: category,
+    status: "Pending",
+    businessMcUrl: "",
+    economicFeasibilityStudyUrl: "",
+    socialMediaUrls: [],
+  });
 
-  const handleFormSubmit = async () => {
-    await axios.post("backendUrl", {});
+  const handleAddImage = () => {
+    if (formData.extraPhoto.trim() !== "") {
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, prev.extraPhoto],
+        extraPhoto: "",
+      }));
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const { extraPhoto, ...finalFormData } = formData;
+
+    try {
+      const response = await axios.post("backendUrl", finalFormData);
+      console.log("Form submitted successfully:", finalFormData);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   const handleClick = (e) => {
     const value = e.currentTarget.getAttribute("data-value");
     setCategory(value);
+    setFormData({ ...formData, categoryText: value });
   };
 
   return (
@@ -25,20 +64,18 @@ const NewProj = () => {
       <div className="flex flex-row justify-around">
         <div
           onClick={handleClick}
-          data-value="المشاريع الريادية"
+          data-value="entrepreneurial"
           className={`bg-[#D8E9E5] rounded-[10px] px-6 py-2 tajawal-extrabold font-[14px] cursor-pointer ${
-            category === "المشاريع الريادية"
-              ? "text-[#438050]"
-              : "text-[#9A9A9A]"
+            category === "entrepreneurial" ? "text-[#438050]" : "text-[#9A9A9A]"
           }`}
         >
           المشاريع الريادية
         </div>
         <div
           onClick={handleClick}
-          data-value="الحرف اليدوية"
+          data-value="handicrafts"
           className={`bg-[#D8E9E5] rounded-[10px] px-6 py-2 tajawal-extrabold font-[14px]  cursor-pointer ${
-            category === "الحرف اليدوية" ? "text-[#438050]" : "text-[#9A9A9A]"
+            category === "handicrafts" ? "text-[#438050]" : "text-[#9A9A9A]"
           }`}
         >
           الحرف اليدوية
@@ -49,7 +86,7 @@ const NewProj = () => {
         انشئ مشروعا
       </p>
 
-      <form className="space-y-2 mx-4">
+      <form className="space-y-2 mx-4" onSubmit={handleFormSubmit}>
         <div className="grid grid-cols-1 gap-4">
           <div>
             <Input
@@ -57,57 +94,71 @@ const NewProj = () => {
               placeholder="اكتب العنوان"
               size={15}
               more={"text-right"}
+              required={true}
+              onChange={handleInputChange}
             />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <Input
-            id="category"
+            id="categoryText"
             placeholder="الفئة"
+            required={true}
             size={15}
             more={"text-center"}
+            onChange={handleInputChange}
           />
 
           <div>
             <Input
-              id="city"
+              id="location"
+              required={true}
               placeholder="المدينة"
               size={15}
               more={"text-center"}
+              onChange={handleInputChange}
             />
           </div>
         </div>
 
         <div>
           <textarea
-            id="message"
+            id="description"
             rows="6"
-            className="text-right tajawal-medium text-[10px] block p-2.5 w-full text-sm bg-[#E9E9E9] text-[#A6A6A6] placeholder:text-[#A6A6A6] rounded-[10px]"
+            className="text-right border-0 tajawal-medium text-[10px] block p-2.5 w-full text-sm bg-[#E9E9E9] text-black placeholder:text-[#A6A6A6] rounded-[10px]"
+            required={true}
             placeholder="اشرح عن عملك"
+            onChange={handleInputChange}
           ></textarea>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <Input
-            id="study"
+            id="economicFeasibilityStudyUrl"
             placeholder="رابط لملف دراسة الجدوى"
+            required={true}
             size={13}
             more={"text-center"}
+            onChange={handleInputChange}
           />
           <Input
-            id="cavas"
+            id="businessMcUrl"
             placeholder="رابط لمخطط نموذج الاعمال"
+            required={true}
             size={13}
             more={"text-center"}
+            onChange={handleInputChange}
           />
         </div>
 
         <div className="grid grid-cols-1">
           <Input
-            id="mainPic"
+            id="mainImage"
             placeholder="اضف رابط للصورة الرئيسية"
+            required={true}
             size={15}
             more={"text-right"}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -116,19 +167,29 @@ const NewProj = () => {
         </p>
 
         <div className="flex flex-row gap-2 w-full pb-14">
-          <div className="bg-[#438050] p-2 rounded-[10px] items-center justify-center flex w-[54px]">
+          <div
+            className="bg-[#438050] p-2 rounded-[10px] items-center justify-center flex w-[54px] cursor-pointer"
+            onClick={handleAddImage}
+          >
             <img src={assets.add} />
           </div>
           <Input
-            id="extraPhotos"
+            id="extraPhoto"
             placeholder="اضف رابط لصورة اضافية"
             size={15}
             className="w-full"
             more={"text-right"}
+            value={formData.extraPhoto}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, extraPhoto: e.target.value }))
+            }
           />
         </div>
 
-        <button className="tajawal-bold text-[16px] bg-[rgb(1,84,19,0.74)] w-full text-white p-4 rounded-[10px]">
+        <button
+          type="submit"
+          className="tajawal-bold text-[16px] bg-[rgb(1,84,19,0.74)] w-full text-white p-4 rounded-[10px]"
+        >
           ارسل طلب النشر
         </button>
       </form>
